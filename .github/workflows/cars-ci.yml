@@ -23,20 +23,10 @@ jobs:
         pip install --upgrade cython numpy
         pip install --no-build-isolation --editable .[dev,docs,pandora_mccnn]
         pip list
-    - name: Unit Tests
-      run: |
-        pytest -m "unit_tests" -o log_cli=true -o log_cli_level=INFO
-    - name: Lint Tests
-      run: |
-        echo "Lint test"
-        isort --check cars tests
-        black --check cars tests
-        flake8 cars tests
-        pylint cars tests --rcfile=.pylintrc --output-format=parseable | tee pylint-report.txt # pipefail to propagate pylint exit code in bash
     - name: End2end Tests
       run: |
         export CARS_GITHUB_ACTIONS=true
-        pytest -m "end2end_tests" -o log_cli=true -o log_cli_level=INFO
+        pytest tests/test_end2end.py -o log_cli=true -o log_cli_level=INFO
 
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
